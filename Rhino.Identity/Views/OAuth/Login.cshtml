@@ -1,0 +1,28 @@
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@using Rhino.Identity.Models.OAuth
+@model OAuthPostLoginModel
+
+<form class="form-inline" asp-action="Login" asp-controller="OAuth" method="post">
+    @if (!string.IsNullOrEmpty(ViewBag.AppName))
+    {
+        <p>
+            Application <b>@ViewBag.AppName</b> asks permissions to your profile
+        </p>
+    }
+
+    <input asp-for="LoginId" />
+    <div>
+        <label asp-for="Email" class="">Login:</label>
+        <input asp-for="Email" />
+        <span asp-validation-for="Email"></span>
+    </div>
+    <div>
+        <label asp-for="Password" class="">Password:</label>
+        <input asp-for="Password" />
+        <span asp-validation-for="Password"></span>
+    </div>
+    <div>
+        @Html.ValidationSummary(excludePropertyErrors:true)
+    </div>
+    <button type="submit" class="nav-link btn btn-link text-dark">Login</button>
+</form>

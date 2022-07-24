@@ -1,0 +1,32 @@
+version: '3.4'
+
+services:
+  rhino.moneykeeper:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:7044;http://+:5044
+    ports:
+      - "5044:5044"
+      - "7044:7044"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+
+  rhino.identity:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:7043;http://+:5043
+    ports:
+      - "5043:5043"
+      - "7043:7043/tcp"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+
+  db:
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+    ports:
+      - "7300:3306"
+    volumes:
+      - C:\mysql\rhinoidentity:/var/lib/mysql
