@@ -9,9 +9,9 @@ namespace Rhino.MoneyKeeper.Services.RhinoOAuth
         public RhinoOAuthOptions()
         {
             CallbackPath = new PathString("/signin-rhino");
-            AuthorizationEndpoint = "http://localhost:5043/OAuth/Login";
-            TokenEndpoint = "http://localhost:5043/OAuth/Token";
-            UserInformationEndpoint = "http://localhost:5043/OAuth/user-information";
+            AuthorizationEndpoint = "https://localhost:7043/OAuth/Login";
+            TokenEndpoint = "https://localhost:7043/OAuth/Token";
+            UserInformationEndpoint = "https://localhost:7043/OAuth/user-information";
             Scope.Add("read_profile");
 
             ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "id");

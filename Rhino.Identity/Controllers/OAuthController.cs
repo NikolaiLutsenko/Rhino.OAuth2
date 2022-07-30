@@ -149,8 +149,8 @@ namespace Rhino.Identity.Controllers
             if (user == null)
                 return BadRequest("Problem with user");
 
-            var token = await jwtGenerator.Generate(user, codeInfo.Scope.Split(' '));
-            var accessToken = new JwtSecurityTokenHandler().WriteToken(token);
+            var token = await jwtGenerator.GenerateAccessToken(user, codeInfo.Scope.Split(' '));
+            var refreshToken = jwtGenerator.GenerateRefreshToken();
 
             await _oAuthRepo.AddNewLogin(
                 codeInfo.Id,
@@ -163,16 +163,17 @@ namespace Rhino.Identity.Controllers
                 codeInfo.ResponseType,
                 codeInfo.Scope,
                 codeInfo.State,
-                accessToken,
-                refreshToken: null);
+                token.Token,
+                refreshToken: refreshToken);
 
             await _distributedCache.RemoveAsync($"code:{model.ClientId}_{model.Code}");
 
             return Ok(new TokenResult
             {
-                AccessToken = accessToken,
-                ExpiresIn = new DateTimeOffset(token.ValidTo).ToUnixTimeSeconds(),
-                TokenType = "Bearer"
+                AccessToken = token.Token,
+                ExpiresIn = new DateTimeOffset(token.ExpiresIn).ToUnixTimeSeconds(),
+                TokenType = "Bearer",
+                RefreshToken = refreshToken,
             });
         }
 
@@ -181,7 +182,7 @@ namespace Rhino.Identity.Controllers
         [Route("[controller]/user-information")]
         public IActionResult UserInformation()
         {
-            return Ok(new
+            return Json(new
             {
                 Id = User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value,
                 Email = User.Claims.First(x => x.Type == ClaimTypes.Email).Value,

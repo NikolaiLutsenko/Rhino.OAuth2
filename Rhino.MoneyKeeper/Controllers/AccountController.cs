@@ -18,9 +18,10 @@ namespace Rhino.MoneyKeeper.Controllers
         [HttpGet]
         public async Task RhinoLogin()
         {
+            var redirectUrl = Url.Action("signin-rhino");
             await this.HttpContext.ChallengeAsync("Rhino", new AuthenticationProperties
             {
-                RedirectUri = Url.Action("signin-rhino")
+                RedirectUri = redirectUrl
             });
 
             //var scope = "read_profile";
