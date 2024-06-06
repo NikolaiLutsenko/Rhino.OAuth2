@@ -77,11 +77,11 @@ namespace Rhino.Identity.Controllers
             if (byteArray == null)
             {
                 ModelState.AddModelError("", "Unknown login id");
-                return View(ModelState);
+                return View();
             }
 
             if (!ModelState.IsValid)
-                return View(ModelState);
+                return View();
 
             var user = await _userManager.FindByEmailAsync(model.Email);
             if (user == null || !await _userManager.CheckPasswordAsync(user, model.Password))
@@ -95,7 +95,7 @@ namespace Rhino.Identity.Controllers
             if (loginInfo == null)
             {
                 ModelState.AddModelError("", "Data was broken. Try to return to your service and start login flow one more time");
-                return View(ModelState);
+                return View();
             }
             if (loginInfo == null)
                 return BadRequest("Cannot set code by login id");

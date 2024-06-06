@@ -16,13 +16,14 @@ namespace Rhino.MoneyKeeper.Services
 
         internal string GenerateOAuthRequestUrl(string scope, string redirectUrl, string codeChellage)
         {
-            var oauthEndpoint = "http://localhost:5043/OAuth/Login";
+            var oauthEndpoint = "https://localhost:7043/OAuth/Login";
 
             var queryParams = new Dictionary<string, string?>
             {
                 { "client_id", _clientId },
                 { "redirect_uri", redirectUrl },
                 { "scope", scope },
+                { "state", "somestr" }, //TODO figure out what is it
                 { "code_challenge", codeChellage },
                 { "code_challenge_method", "S256" },
                 { "response_type", "code" }
@@ -33,13 +34,14 @@ namespace Rhino.MoneyKeeper.Services
 
         internal async Task<TokenResult?> ExchangeCodeOnTokenAsync(string code, string? codeVerifier, string redirectUrl)
         {
-            var tokenEndpoint = "http://localhost:5043/OAuth/Token";
+            var tokenEndpoint = "https://localhost:7043/OAuth/Token";
 
             var authParams = new Dictionary<string, string?>
             {
                 { "client_id", _clientId },
                 { "client_secret", _clientSecret },
                 { "code", code },
+                { "state", "somestr" }, //TODO figure out what is it
                 { "code_verifier", codeVerifier },
                 { "grant_type", "authorization_code" },
                 { "redirect_uri", redirectUrl },
